@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import {
   fetchItems,
@@ -10,10 +10,15 @@ import {
   setPageSize,
 } from "../store/itemsSlice";
 
+import { addFavorite, removeFavorite } from "../store/favoritesSlice";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
+
+import "../styles/ItemsList.css";
 
 export default function ItemsList() {
   const dispatch = useDispatch();
+  const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const {
     list,
@@ -24,15 +29,11 @@ export default function ItemsList() {
     pagination,
   } = useSelector((s) => s.items);
 
-  const [params, setParams] = useSearchParams();
+  const favorites = useSelector((s) => s.favorites.items);
 
-  // локальные input-значения (до debounce)
   const [inputSearch, setInputSearch] = useState(params.get("q") || "");
-
-  // debounce
   const debouncedSearch = useDebouncedValue(inputSearch, 500);
 
-  // 1. Синхронизация URL → Redux (initial load)
   useEffect(() => {
     dispatch(setSearch(params.get("q") || ""));
     dispatch(
@@ -45,7 +46,6 @@ export default function ItemsList() {
     dispatch(setPageSize(Number(params.get("pageSize")) || 20));
   }, []);
 
-  // 2. Когда Redux state меняется → обновляем URL
   useEffect(() => {
     const newParams = {};
 
@@ -59,16 +59,28 @@ export default function ItemsList() {
     setParams(newParams);
   }, [search, filters, pagination]);
 
-  // 3. debounce-search → Redux
   useEffect(() => {
     dispatch(setSearch(debouncedSearch));
   }, [debouncedSearch]);
 
-  // 4. Каждый раз при изменении URL → загружаем данные
   useEffect(() => {
     dispatch(fetchItems());
   }, [params.toString()]);
 
+  const toggleFavorite = (item) => {
+    if (favorites.some((f) => f.id === item.id)) {
+      dispatch(removeFavorite(item.id));
+    } else {
+      dispatch(
+        addFavorite({
+          id: item.id,
+          name: item.name,
+          status: item.status,
+          gender: item.gender,
+        })
+      );
+    }
+  };
 
   const handleStatus = (e) => {
     dispatch(setFilters({ status: e.target.value }));
@@ -89,22 +101,22 @@ export default function ItemsList() {
     dispatch(setPage(1));
   };
 
-  if (loadingList) return <h2>Loading...</h2>;
-  if (errorList) return <h3>Error: {errorList}</h3>;
+  if (loadingList) return <h2 className="loading">Loading...</h2>;
+  if (errorList) return <h3 className="error">Error: {errorList}</h3>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Items</h1>
+    <div className="items-container">
+      <h1 className="items-title">Characters</h1>
 
       <input
+        className="items-search"
         type="text"
         placeholder="Search..."
         value={inputSearch}
         onChange={(e) => setInputSearch(e.target.value)}
-        style={{ padding: "6px 10px", marginBottom: "10px" }}
       />
 
-      <div style={{ margin: "10px 0", display: "flex", gap: "20px" }}>
+      <div className="items-filters">
         <select value={filters.status} onChange={handleStatus}>
           <option value="">Status: Any</option>
           <option value="alive">Alive</option>
@@ -127,15 +139,28 @@ export default function ItemsList() {
         </select>
       </div>
 
-      <div>
+      <div className="items-list">
         {list.map((item) => (
-          <div key={item.id} style={{ marginBottom: "12px" }}>
-            <strong>{item.name}</strong> — {item.status} / {item.gender}
+          <div key={item.id} className="item-card">
+            <div
+              className="item-content"
+              onClick={() => navigate(`/items/${item.id}`)}
+            >
+              <strong>{item.name}</strong> — {item.status} / {item.gender}
+            </div>
+
+            <button
+              className={`item-fav-btn ${favorites.some((f) => f.id === item.id) ? "fav-remove" : "fav-add"
+                }`}
+              onClick={() => toggleFavorite(item)}
+            >
+              {favorites.some((f) => f.id === item.id) ? "Remove" : "Add"}
+            </button>
           </div>
         ))}
       </div>
 
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+      <div className="pagination">
         <button
           disabled={pagination.page <= 1}
           onClick={() => changePage(pagination.page - 1)}
@@ -145,11 +170,7 @@ export default function ItemsList() {
 
         <span>Page: {pagination.page}</span>
 
-        <button
-          onClick={() => changePage(pagination.page + 1)}
-        >
-          Next
-        </button>
+        <button onClick={() => changePage(pagination.page + 1)}>Next</button>
       </div>
     </div>
   );

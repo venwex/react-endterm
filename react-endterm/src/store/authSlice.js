@@ -1,10 +1,12 @@
-// src/store/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   signUpWithEmail,
   signInWithEmail,
   signOutUser,
 } from "../services/authService";
+
+import { mergeFavorites } from "../services/mergeFavorites";
+import { setFavorites, setMergedFlag } from "./favoritesSlice";
 
 const initialState = {
   user: null,

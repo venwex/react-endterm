@@ -1,77 +1,75 @@
 .navbar {
+  height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 22px;
-  background: #0d0f11;
-  border-bottom: 2px solid #00ff9c;
-  box-shadow: 0 0 20px rgba(0, 255, 156, 0.3);
-  font-family: "Trebuchet MS", sans-serif;
+  padding: 0 22px;
+  background: #0e0e10;
+  border-bottom: 2px solid #00ffc8;
 }
 
 .navbar-logo {
-  color: #00ff9c;
-  font-size: 24px;
+  color: #ffffff;
+  font-size: 22px;
   text-decoration: none;
-  font-weight: bold;
-  text-shadow: 0 0 12px #00ff9c;
-}
-
-.navbar-logo:hover {
-  color: #7bffcf;
-  text-shadow: 0 0 20px #00ffc8;
+  font-weight: 600;
 }
 
 .navbar-links {
   display: flex;
-  gap: 18px;
+  gap: 22px;
 }
 
 .nav-item {
-  color: #d0ffe8;
+  color: #cfcfcf;
   text-decoration: none;
-  font-size: 18px;
-  position: relative;
-  transition: 0.2s ease;
+  font-size: 16px;
+  transition: color 0.2s ease-in-out;
 }
 
 .nav-item:hover {
-  color: #00ff9c;
-  text-shadow: 0 0 10px #00ff9c;
-}
-
-.nav-item.active {
-  color: #00ff9c;
-  text-shadow: 0 0 16px #00ff9c, 0 0 26px #00ffaa;
-  font-weight: bold;
+  color: #00ffc8;
 }
 
 .navbar-auth {
   display: flex;
-  gap: 14px;
   align-items: center;
+  gap: 14px;
+}
+
+.navbar-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #00ffc8;
+  transition: 0.25s ease-in-out;
+}
+
+.navbar-avatar:hover {
+  transform: scale(1.15);
+  border-color: #ffffff;
 }
 
 .user-email {
-  color: #9affdd;
-  font-size: 16px;
-  opacity: 0.9;
+  color: #cfcfcf;
+  font-size: 15px;
 }
 
 .logout-btn {
-  background: transparent;
-  border: 2px solid #ff4d6d;
-  padding: 6px 12px;
-  color: #ff4d6d;
-  cursor: pointer;
+  padding: 7px 16px;
+  font-size: 14px;
+  color: #000;
+  background: #00ffc8;
+  border: none;
   border-radius: 6px;
-  font-size: 15px;
-  transition: 0.2s ease;
-  text-shadow: 0 0 4px #ff4d6d;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
 
 .logout-btn:hover {
-  background: #ff4d6d;
-  color: white;
-  box-shadow: 0 0 10px #ff4d6d;
+  background: #ffffff;
 }
+
+

@@ -1,4 +1,3 @@
-// src/components/Layout/ProtectedRoute.jsx
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 

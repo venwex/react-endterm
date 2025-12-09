@@ -5,12 +5,10 @@ export async function getItems({ search = "", filters = {}, page = 1, pageSize =
 
   if (search) params.append("name", search);
 
-  // фильтры: status, species, gender
   Object.entries(filters).forEach(([key, value]) => {
     if (value) params.append(key, value);
   });
 
-  // Пагинация
   params.append("page", page);
 
   const url = `${BASE_URL}/?${params.toString()}`;
@@ -22,7 +20,6 @@ export async function getItems({ search = "", filters = {}, page = 1, pageSize =
 
   const data = await res.json();
 
-  // API не поддерживает pageSize → делаю client-side slicing
   const results = data.results || [];
 
   return {

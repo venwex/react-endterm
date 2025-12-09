@@ -1,8 +1,9 @@
-// src/routes/Signup.jsx
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser, resetAuthError } from "../store/authSlice";
+
+import "../styles/Signup.css";
 
 export default function Signup() {
   const dispatch = useDispatch();
@@ -46,51 +47,59 @@ export default function Signup() {
       ).unwrap();
 
       navigate("/profile");
-    } catch {}
+    } catch { }
   };
 
   return (
-    <main>
-      <h1>Sign Up</h1>
+    <main className="signup-container">
+      <h1 className="signup-title">Sign Up</h1>
 
-      <form onSubmit={submit}>
-        <label>Email
+      <form className="signup-form" onSubmit={submit}>
+        <label className="signup-label">
+          Email
           <input
+            className="signup-input"
             value={email}
             disabled={isLoading}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && <p className="signup-error">{errors.email}</p>}
         </label>
 
-        <label>Пароль
+        <label className="signup-label">
+          Пароль
           <input
+            className="signup-input"
             type="password"
             value={password}
             disabled={isLoading}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && <p>{errors.password}</p>}
+          {errors.password && (
+            <p className="signup-error">{errors.password}</p>
+          )}
         </label>
 
-        <label>Повторите пароль
+        <label className="signup-label">
+          Повторите пароль
           <input
+            className="signup-input"
             type="password"
             value={repeatPassword}
             disabled={isLoading}
             onChange={(e) => setRepeatPassword(e.target.value)}
           />
-          {errors.repeat && <p>{errors.repeat}</p>}
+          {errors.repeat && <p className="signup-error">{errors.repeat}</p>}
         </label>
 
-        {error && <p>Ошибка: {error}</p>}
+        {error && <p className="signup-error">Ошибка: {error}</p>}
 
-        <button disabled={isLoading}>
+        <button className="signup-btn" disabled={isLoading}>
           {isLoading ? "Создание..." : "Создать аккаунт"}
         </button>
       </form>
 
-      <p>
+      <p className="signup-note">
         Уже есть аккаунт? <Link to="/login">Войти</Link>
       </p>
     </main>

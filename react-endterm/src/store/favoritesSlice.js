@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  items: [],  // массив id (или карточек)
+  items: [],  // массив объектов {id, name, status, gender}
+  mergedFlag: false,
 };
 
 const favoritesSlice = createSlice({
@@ -11,21 +12,35 @@ const favoritesSlice = createSlice({
     setFavorites(state, action) {
       state.items = action.payload;
     },
+
     addFavorite(state, action) {
-      if (!state.items.includes(action.payload)) {
-        state.items.push(action.payload);
+      const newItem = action.payload;
+      if (!state.items.some((el) => el.id === newItem.id)) {
+        state.items.push(newItem);
       }
     },
+
     removeFavorite(state, action) {
-      state.items = state.items.filter((id) => id !== action.payload);
+      const id = action.payload;
+      state.items = state.items.filter((el) => el.id !== id);
     },
+
     clearFavorites(state) {
       state.items = [];
+    },
+
+    setMergedFlag(state, action) {
+      state.mergedFlag = action.payload;
     },
   },
 });
 
-export const { setFavorites, addFavorite, removeFavorite, clearFavorites } =
-  favoritesSlice.actions;
+export const {
+  setFavorites,
+  addFavorite,
+  removeFavorite,
+  clearFavorites,
+  setMergedFlag,
+} = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;
