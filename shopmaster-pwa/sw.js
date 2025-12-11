@@ -1,28 +1,47 @@
-const CACHE_NAME = 'shopmaster-v1';
-const urlsToCache = [
+const CACHE_NAME = 'shopmaster-app-shell-v1';
+
+// Главное: кэшируем App Shell — то, что нужно для отображения UI offline
+const APP_SHELL = [
   '/',
   '/index.html',
-  '/index.tsx',
+  '/manifest.json',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/icon-512-maskable.png'
 ];
 
+// Install
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
   );
+  self.skipWaiting();
 });
 
+// Activate
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+// Fetch
 self.addEventListener('fetch', (event) => {
-  // Cache-first for static assets, Network-first for API
-  if (event.request.url.includes('dummyjson.com')) {
+  const request = event.request;
+
+  // Network-first для API
+  if (request.url.includes('dummyjson.com')) {
     event.respondWith(
-      fetch(event.request)
-        .catch(() => caches.match(event.request))
+      fetch(request).catch(() => caches.match(request))
     );
-  } else {
-    event.respondWith(
-      caches.match(event.request)
-        .then((response) => response || fetch(event.request))
-    );
+    return;
   }
+
+  // Cache-first для статики
+  event.respondWith(
+    caches.match(request).then(cached => {
+      return (
+        cached ||
+        fetch(request).catch(() => caches.match('/index.html'))
+      );
+    })
+  );
 });

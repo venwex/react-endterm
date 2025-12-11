@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import { UserProfile } from '../types';
 import { favoritesService } from '../services/favoritesService';
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../services/firebase";
 
 interface GlobalContextType {
   user: UserProfile | null;
@@ -20,47 +22,63 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [favorites, setFavorites] = useState<number[]>([]);
   const [mergeMessage, setMergeMessage] = useState<string | null>(null);
 
-  // Auth Listener
+  // AUTH LISTENER
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentAuthUser) => {
       setLoading(true);
-      if (currentUser) {
-        // User logged in
+
+      if (currentAuthUser) {
+        // 1. Достаём Firestore профиль
+        const userRef = doc(db, "users", currentAuthUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        // 2. Объединяем AUTH + FIRESTORE
+        const profileData = userSnap.data() || {};
+
         setUser({
-          uid: currentUser.uid,
-          email: currentUser.email,
-          displayName: currentUser.displayName,
-          photoURL: currentUser.photoURL
+          uid: currentAuthUser.uid,
+          email: currentAuthUser.email,
+          displayName: currentAuthUser.displayName || profileData.displayName || null,
+          photoURL: profileData.photoURL || currentAuthUser.photoURL || null
         });
 
-        // Merge logic
+        // --- Favorites merge logic ---
         const localFavs = favoritesService.getLocalFavorites();
         if (localFavs.length > 0) {
-          await favoritesService.mergeFavorites(currentUser.uid, localFavs);
+          await favoritesService.mergeFavorites(currentAuthUser.uid, localFavs);
           setMergeMessage("Your local favorites were merged with your account.");
           setTimeout(() => setMergeMessage(null), 5000);
         }
 
-        // Fetch user favorites
-        const userFavs = await favoritesService.getUserFavorites(currentUser.uid);
+        // Fetch favorites
+        const userFavs = await favoritesService.getUserFavorites(currentAuthUser.uid);
         setFavorites(userFavs);
+
+        // 3. REALTIME LISTENER for profile updates (photoURL!! 🔥)
+        onSnapshot(userRef, (snap) => {
+          const data = snap.data();
+          if (data) {
+            setUser(prev => prev ? { ...prev, ...data } : prev);
+          }
+        });
+
       } else {
-        // Guest
+        // guest
         setUser(null);
         setFavorites(favoritesService.getLocalFavorites());
       }
+
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
+  // FAVORITES
   const toggleFavorite = async (id: number) => {
     const isFav = favorites.includes(id);
-    let newFavs = [];
 
     if (user) {
-      // Optimistic update
       if (isFav) {
         setFavorites(prev => prev.filter(fid => fid !== id));
         await favoritesService.removeFromUser(user.uid, id);
@@ -69,13 +87,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         await favoritesService.addToUser(user.uid, id);
       }
     } else {
-      // Local storage
-      if (isFav) {
-        newFavs = favoritesService.removeFromLocal(id);
-      } else {
-        newFavs = favoritesService.addToLocal(id);
-      }
-      setFavorites(newFavs);
+      const updated = isFav
+        ? favoritesService.removeFromLocal(id)
+        : favoritesService.addToLocal(id);
+      setFavorites(updated);
     }
   };
 
