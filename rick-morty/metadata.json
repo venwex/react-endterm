@@ -1,5 +1,0 @@
-{
-  "name": "Rick & Morty Galaxy",
-  "description": "A comprehensive Rick & Morty character explorer with authentication, favorites management, and profile customization. Features include PWA support, image compression, and real-time data syncing.",
-  "requestFramePermissions": []
-}

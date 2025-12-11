@@ -1,0 +1,8 @@
+{
+  "name": "ShopMaster PWA",
+  "description": "A feature-rich e-commerce PWA with Firebase Auth, Favorites, and Profile management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
