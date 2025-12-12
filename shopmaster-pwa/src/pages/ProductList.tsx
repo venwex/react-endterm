@@ -13,7 +13,7 @@ const ProductList = () => {
   const [total, setTotal] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // URL State Sync
+  // url state sync
   const queryParam = searchParams.get('q') || '';
   const pageParam = parseInt(searchParams.get('page') || '1');
   const limitParam = parseInt(searchParams.get('limit') || '20');
@@ -22,11 +22,11 @@ const ProductList = () => {
   const debouncedSearch = useDebounce(searchTerm, 500);
 
   useEffect(() => {
-    // Update URL when search input changes (debounced)
+    // update url when search input changes (debounced)
     const newParams: any = { page: '1', limit: limitParam.toString() };
     if (debouncedSearch) newParams.q = debouncedSearch;
     setSearchParams(newParams);
-  }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
 
   useEffect(() => {
     const fetchProducts = async () => {

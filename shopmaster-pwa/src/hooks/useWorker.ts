@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-// We define the worker code as a string to avoid external file dependencies in this build system
 const workerCode = `
 self.onmessage = async (e) => {
   const { file } = e.data;

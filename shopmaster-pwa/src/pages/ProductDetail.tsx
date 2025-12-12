@@ -56,7 +56,6 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          {/* Details */}
           <div className="md:w-1/2 p-8">
             <div className="flex justify-between items-start">
               <div>

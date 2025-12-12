@@ -22,17 +22,17 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [favorites, setFavorites] = useState<number[]>([]);
   const [mergeMessage, setMergeMessage] = useState<string | null>(null);
 
-  // AUTH LISTENER
+  // auth listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentAuthUser) => {
       setLoading(true);
 
       if (currentAuthUser) {
-        // 1. Достаём Firestore профиль
+        // 1. gettin firestore profile
         const userRef = doc(db, "users", currentAuthUser.uid);
         const userSnap = await getDoc(userRef);
 
-        // 2. Объединяем AUTH + FIRESTORE
+        // 2. combine auth + firestore
         const profileData = userSnap.data() || {};
 
         setUser({
@@ -42,7 +42,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           photoURL: profileData.photoURL || currentAuthUser.photoURL || null
         });
 
-        // --- Favorites merge logic ---
+        // -favrites merge logic
         const localFavs = favoritesService.getLocalFavorites();
         if (localFavs.length > 0) {
           await favoritesService.mergeFavorites(currentAuthUser.uid, localFavs);
@@ -50,11 +50,11 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           setTimeout(() => setMergeMessage(null), 5000);
         }
 
-        // Fetch favorites
+        // fetching favorites
         const userFavs = await favoritesService.getUserFavorites(currentAuthUser.uid);
         setFavorites(userFavs);
 
-        // 3. REALTIME LISTENER for profile updates
+        // 3. realtime listener for profile updates
         onSnapshot(userRef, (snap) => {
           const data = snap.data();
           if (data) {
@@ -74,7 +74,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => unsubscribe();
   }, []);
 
-  // FAVORITES
+  // favories
   const toggleFavorite = async (id: number) => {
     const isFav = favorites.includes(id);
 

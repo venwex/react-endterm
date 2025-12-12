@@ -15,7 +15,7 @@ const Profile = () => {
 
   if (!user) return null;
 
-  // Convert Blob → Base64
+  // convert blob -> base64
   const toBase64 = (blob: Blob): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -33,14 +33,14 @@ const Profile = () => {
     setMessage('Compressing image via Web Worker...');
 
     try {
-      // 1. Compress
+      // 1. compress
       const compressedBlob = await compressImage(originalFile);
 
-      // 2. Convert to Base64
+      // 2. convert to Base64
       setMessage('Converting to Base64...');
       const base64img = await toBase64(compressedBlob);
 
-      // 3. Save ONLY to Firestore (Auth cannot accept long strings)
+      // 3. save only to firestore (btw it cant accept long strings, fix it later)
       setMessage('Saving to Firestore...');
       await setDoc(
         doc(db, 'users', user.uid),

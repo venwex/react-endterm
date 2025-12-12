@@ -10,7 +10,6 @@ const APP_SHELL = [
   '/icons/icon-512-maskable.png'
 ];
 
-// Install
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
@@ -18,16 +17,14 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate
 self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// Fetch
 self.addEventListener('fetch', (event) => {
   const request = event.request;
 
-  // Network-first для API
+  // тetwork-first для апишки
   if (request.url.includes('dummyjson.com')) {
     event.respondWith(
       fetch(request).catch(() => caches.match(request))
@@ -35,7 +32,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first для статики
+  // сache-first для статики
   event.respondWith(
     caches.match(request).then(cached => {
       return (
