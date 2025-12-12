@@ -58,7 +58,7 @@ const Navbar = () => {
               )}
             </div>
           </div>
-          
+
           <div className="-mr-2 flex md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="bg-indigo-700 p-2 rounded-md text-white">
               Menu
@@ -66,26 +66,26 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-indigo-600">
-           <Link to="/" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Home</Link>
-           <Link to="/products" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Products</Link>
-           <Link to="/favorites" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">
-             Favorites ({favorites.length})
-           </Link>
-           {user ? (
-             <>
-                <Link to="/profile" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Profile</Link>
-                <button onClick={handleLogout} className="w-full text-left block hover:bg-red-600 bg-red-500 px-3 py-2 rounded-md">Logout</button>
-             </>
-           ) : (
-             <>
-               <Link to="/login" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Login</Link>
-               <Link to="/signup" className="block hover:bg-gray-100 bg-white text-indigo-600 px-3 py-2 rounded-md">Sign Up</Link>
-             </>
-           )}
+          <Link to="/" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Home</Link>
+          <Link to="/products" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Products</Link>
+          <Link to="/favorites" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">
+            Favorites ({favorites.length})
+          </Link>
+          {user ? (
+            <>
+              <Link to="/profile" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Profile</Link>
+              <button onClick={handleLogout} className="w-full text-left block hover:bg-red-600 bg-red-500 px-3 py-2 rounded-md">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="block hover:bg-indigo-700 px-3 py-2 rounded-md">Login</Link>
+              <Link to="/signup" className="block hover:bg-gray-100 bg-white text-indigo-600 px-3 py-2 rounded-md">Sign Up</Link>
+            </>
+          )}
         </div>
       )}
     </nav>

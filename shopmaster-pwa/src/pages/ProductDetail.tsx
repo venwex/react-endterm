@@ -35,7 +35,7 @@ const ProductDetail = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Link to="/products" className="text-indigo-600 mb-6 inline-block hover:underline">← Back to Products</Link>
-      
+
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="md:flex">
           {/* Image Gallery */}
@@ -45,8 +45,8 @@ const ProductDetail = () => {
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2">
               {product.images.map((img, idx) => (
-                <button 
-                  key={idx} 
+                <button
+                  key={idx}
                   onClick={() => setSelectedImage(img)}
                   className={`w-20 h-20 flex-shrink-0 border-2 rounded-md p-1 ${selectedImage === img ? 'border-indigo-600' : 'border-gray-200'}`}
                 >
@@ -59,16 +59,16 @@ const ProductDetail = () => {
           {/* Details */}
           <div className="md:w-1/2 p-8">
             <div className="flex justify-between items-start">
-               <div>
-                  <h2 className="text-sm text-indigo-600 font-bold uppercase tracking-wide">{product.brand} - {product.category}</h2>
-                  <h1 className="text-3xl font-bold text-gray-900 mt-2">{product.title}</h1>
-               </div>
-               <button 
+              <div>
+                <h2 className="text-sm text-indigo-600 font-bold uppercase tracking-wide">{product.brand} - {product.category}</h2>
+                <h1 className="text-3xl font-bold text-gray-900 mt-2">{product.title}</h1>
+              </div>
+              <button
                 onClick={() => toggleFavorite(product.id)}
                 className={`p-3 rounded-full ${isFav ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-400'}`}
-               >
-                 {isFav ? '❤️' : '🤍'}
-               </button>
+              >
+                {isFav ? '❤️' : '🤍'}
+              </button>
             </div>
 
             <div className="mt-4 flex items-center">
@@ -89,22 +89,22 @@ const ProductDetail = () => {
             </p>
 
             <div className="mt-8 pt-8 border-t border-gray-200 grid grid-cols-2 gap-4">
-               <div>
-                 <span className="block text-sm text-gray-500">Brand</span>
-                 <span className="font-medium">{product.brand}</span>
-               </div>
-               <div>
-                 <span className="block text-sm text-gray-500">SKU</span>
-                 <span className="font-medium">PROD-{product.id}</span>
-               </div>
-               <div>
-                 <span className="block text-sm text-gray-500">Category</span>
-                 <span className="font-medium capitalize">{product.category}</span>
-               </div>
-               <div>
-                 <span className="block text-sm text-gray-500">Delivery</span>
-                 <span className="font-medium">Free Shipping</span>
-               </div>
+              <div>
+                <span className="block text-sm text-gray-500">Brand</span>
+                <span className="font-medium">{product.brand}</span>
+              </div>
+              <div>
+                <span className="block text-sm text-gray-500">SKU</span>
+                <span className="font-medium">PROD-{product.id}</span>
+              </div>
+              <div>
+                <span className="block text-sm text-gray-500">Category</span>
+                <span className="font-medium capitalize">{product.category}</span>
+              </div>
+              <div>
+                <span className="block text-sm text-gray-500">Delivery</span>
+                <span className="font-medium">Free Shipping</span>
+              </div>
             </div>
 
             <button className="mt-8 w-full bg-indigo-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-indigo-700 transition shadow-lg">

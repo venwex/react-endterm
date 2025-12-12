@@ -34,13 +34,13 @@ const ProductList = () => {
       try {
         const skip = (pageParam - 1) * limitParam;
         let data;
-        
+
         if (queryParam) {
           data = await apiService.searchProducts(queryParam, limitParam, skip);
         } else {
           data = await apiService.getAllProducts(limitParam, skip);
         }
-        
+
         setProducts(data.products);
         setTotal(data.total);
       } catch (error) {
@@ -54,19 +54,19 @@ const ProductList = () => {
   }, [queryParam, pageParam, limitParam]);
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams({ 
-      q: queryParam, 
-      page: newPage.toString(), 
-      limit: limitParam.toString() 
+    setSearchParams({
+      q: queryParam,
+      page: newPage.toString(),
+      limit: limitParam.toString()
     });
     window.scrollTo(0, 0);
   };
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchParams({ 
-      q: queryParam, 
-      page: '1', 
-      limit: e.target.value 
+    setSearchParams({
+      q: queryParam,
+      page: '1',
+      limit: e.target.value
     });
   };
 
@@ -82,10 +82,10 @@ const ProductList = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        
+
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-gray-700">Items per page:</label>
-          <select 
+          <select
             value={limitParam}
             onChange={handleLimitChange}
             className="border border-gray-300 rounded-md p-1"

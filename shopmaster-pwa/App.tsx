@@ -1,15 +1,15 @@
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { GlobalProvider, useGlobal } from './context/GlobalContext';
-import Navbar from './components/Navbar';
-import Home, { About } from './pages/Home';
-import ProductList from './pages/ProductList';
-import ProductDetail from './pages/ProductDetail';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Favorites from './pages/Favorites';
-import Profile from './pages/Profile';
-import GuardedRoute from './components/GuardedRoute';
+import { GlobalProvider, useGlobal } from '../shopmaster-pwa/src/context/GlobalContext';
+import Navbar from '../shopmaster-pwa/src/components/Navbar';
+import Home, { About } from './src/pages/Home';
+import ProductList from './src/pages/ProductList';
+import ProductDetail from './src/pages/ProductDetail';
+import Login from './src/pages/Login';
+import Signup from './src/pages/Signup';
+import Favorites from './src/pages/Favorites';
+import Profile from './src/pages/Profile';
+import GuardedRoute from '../shopmaster-pwa/src/components/GuardedRoute';
 
 const NotificationBanner = () => {
   const { mergeMessage } = useGlobal();
@@ -35,13 +35,13 @@ const AppRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/favorites" element={<Favorites />} />
-          <Route 
-            path="/profile" 
+          <Route
+            path="/profile"
             element={
               <GuardedRoute>
                 <Profile />
               </GuardedRoute>
-            } 
+            }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

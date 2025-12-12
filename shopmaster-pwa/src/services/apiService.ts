@@ -27,11 +27,11 @@ export const apiService = {
     // DummyJSON categories endpoint returns an array of objects in recent versions, handle carefully
     const data = await res.json();
     if (Array.isArray(data) && typeof data[0] === 'object') {
-        return data.map((c: any) => c.slug || c.name);
+      return data.map((c: any) => c.slug || c.name);
     }
     return data;
   },
-  
+
   getProductsByCategory: async (category: string, limit: number = 20): Promise<ProductsResponse> => {
     const res = await fetch(`${BASE_URL}/category/${category}?limit=${limit}`);
     if (!res.ok) throw new Error('Failed to fetch category products');

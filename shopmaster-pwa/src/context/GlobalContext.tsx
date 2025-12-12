@@ -54,7 +54,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const userFavs = await favoritesService.getUserFavorites(currentAuthUser.uid);
         setFavorites(userFavs);
 
-        // 3. REALTIME LISTENER for profile updates (photoURL!! 🔥)
+        // 3. REALTIME LISTENER for profile updates
         onSnapshot(userRef, (snap) => {
           const data = snap.data();
           if (data) {
